@@ -1,0 +1,24 @@
+.grid-container {
+    width: max-content;
+    display: grid;
+    grid-template-columns: max-content max-content max-content;
+    grid-template-rows: auto;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    background: black;
+    border: 1px solid black
+}
+
+.grid-item-head {
+    background: #FFD800;
+    border: 1px solid black;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.grid-item {
+    background: #FFD800;
+    border: 1px solid black;
+    padding: 10px;
+}
