@@ -1,25 +1,14 @@
-.grid-container {
-    width: max-content;
-    display: grid;
-    grid-template-columns: repeat(4, max-content);
-    grid-template-rows: auto;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    background: black;
-    border: 1px solid black
+
+table {
+    border: 1px solid black;    /* граница всей таблицы */
+    border-collapse: collapse;    /* cхлопываем границы */
 }
 
-.grid-item-head {
-    background: #FFD800;
-    border: 1px solid black;
-    text-align: center;
-    padding: 10px;
-    font-weight: bold;
+tr {
+    border: 1px solid black;    /* границы между строками */
 }
 
-.grid-item {
-    background: #FFD800;
-    border: 1px solid black;
-    padding: 10px;
+td, th {
+    border: 1px solid black;    /* границы между столбцами */
+    padding: 5px;
 }
-

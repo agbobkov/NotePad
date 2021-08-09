@@ -7,67 +7,50 @@ const database = [{
     "name": "Gromenko",
     "tel": "987654"
 }, {
-    "id": "1",
+    "id": "41482cde-f8df-11eb-9a03-0242ac130003",
     "name": "Lihonin",
     "tel": "543210"
 }];
 
 rendering()
 
-// функция вывода на экран
+// вывод на экран
 
 function rendering() {
     let numberString = 1; // задаем начальный номер строки
 
-    database.forEach(function (element) { // перебираем массив, получая каждый объект отдельно
-        let d1 = document.getElementById('one'); // добавляем номер строки
-        d1.insertAdjacentHTML('beforebegin', '<div class="grid-item" render="yes">' + numberString + '</div>')
+    database.forEach(function (obj) { // перебираем массив, получая каждый элемент массива (то есть объект) отдельно
+        let tableStart = document.getElementById('tableStart'); // элемент куда вставляем строки
+        tableStart.insertAdjacentHTML('beforeend', '\
+        <tr> \
+         <td> ' + numberString + ' </td> \
+         <td> ' + obj.name + '</td> \
+         <td > ' + obj.tel + ' </td> \
+         <td> <button onclick="deleteObject(this)" id="' + obj.id + '">Delete</button> </td> \
+         </tr>')
         numberString += 1;
-
-        for (let value in element) { // перебираем каждое свойство объекта
-            if (value !== "id") { // если ключ объекта не равен id, отрисуем значения
-                let d1 = document.getElementById('one');
-                d1.insertAdjacentHTML('beforebegin', '<div class="grid-item" render="yes">' + element[value] + '</div>') // создаем элемент <div> с присваиванием атрибута равного id и видимой части равной значению свойства объекта
-
-                if (value === "tel") { // после ключа объекта "tel" добавляем кнопку
-                    let d2 = document.getElementById('one');
-                    d2.insertAdjacentHTML('beforebegin', '<div class="grid-item" render="yes"><button onclick="deleteObject(this)" row="' + element.id + '">Delete</button></div>')
-                }
-            }
-            // debugger;
-        }
     });
 }
 
-// функция удаления объекта с базы данных
+// удаляем строки таблицы, которые были добавлены
 
 function deleteObject(button) {
+    let rowsForDelete = document.getElementById('tableStart').querySelectorAll('*'); // получаем набор всех добавленных элементов (строк)
+    for (let elem of rowsForDelete) // перебираем все выбранные элементы, удаляя их
+        elem.remove();   // удаляем все отрисованные строки
+    removeByIdButton(button);  // вызываем функцию удаления объекта
+};
 
-    // удаляем элементы таблицы, которые были добавлены
-    let e1 = button.getAttribute("row"); // получаем значение строки в которой нажата кнопка
-    let e = document.querySelectorAll('div[render="yes"]'); // получаем набор узлов с той же строкой, что и кнопка
-    for (let elem of e) // перебираем все выбранные элементы, удаляя их
-        elem.remove();
+// удаляем объект из массива
 
-    // ищем и удаляем элемент из массива с заданным id
+function removeByIdButton(button) {
+    let idButton = button.id; // получаем id кнопки равное id объекта
 
-    removeByKeyValue(database, "id", e1); // вызываем функцию с аргументами массив-атрибут-значение
+    let indexArrayForDelete = database.findIndex(function (obj) { // перебираем каждый объект в массиве
+        return obj.id === idButton // если ключ .id перебираемого объекта равен значению id кнопки возвращаем значение элемента массива
+    });
 
-    function removeByKeyValue(arr, key, value) { // определяем функцию удаления объекта из массива с определенным значением свойства
-
-        let i = arr.length; // длина массива
-        while (i--) { // пока i не станет равно 0 выполняем следующий код
-            if (arr[i] // если объект
-                &&
-                arr[i].hasOwnProperty(key) // имеет ключ key 
-                &&
-                (arguments.length > 2 && arr[i][key] === value)) { // и (число аргументов переданных в функцию > 2 и значение свойства объекта равно аргументу value)
-
-                arr.splice(i, 1); // удаляем один элемент из массива начиная с i-го
-            }
-        }
-        return arr;
-    };
+    database.splice(indexArrayForDelete, 1); // удаляем объект из массива
     console.log(database);
-    rendering()   // отрисовываем таблицу заново
+    rendering() // отрисовываем таблицу заново
 };

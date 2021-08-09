@@ -11,13 +11,22 @@
 
 <body>
 
-    <div class="grid-container">
-        <div class="grid-item-head">№ п/п</div>
-        <div class="grid-item-head">ФИО</div>
-        <div class="grid-item-head">Телефон</div>
-        <div class="grid-item-head">Кнопка</div>
-        <div id="one"></div>
-    </div>
+    <table>
+        <caption>Телефонная книжка</caption>
+        <thead>
+            <!-- Блок с заголовками -->
+            <tr>
+                <!-- Строка -->
+                <th>№ п/п</th>
+                <th>ФИО</th>
+                <th>Телефон</th>
+                <th>Кнопка</th>
+            </tr>
+        </thead>
+        <tbody id="tableStart">
+        </tbody>
+    </table>
+
     <script src="myscript.js"> </script>
 </body>
 
