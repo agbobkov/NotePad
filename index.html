@@ -18,6 +18,27 @@
         <div class="grid-item-head">Кнопка</div>        
     </div>
     <script src="myscript.js"> </script>
+
+<!-- popup -->
+<button class="button-add" onclick="openForm()">Add a note</button>
+<div class="popup" id="formAdd">
+<div class="form-popup">
+  <form onsubmit="addNote();return false;" class="form-container">
+    <h1>Добавить запись</h1>
+
+    <label for="name"><b>Name</b></label>
+    <input type="text" placeholder="Имя" name="name" required>
+  
+  <label for="phone"><b>Phone</b></label>
+    <input type="tel" placeholder="Телефон" name="phone" required>
+
+    <button type="submit" class="btn">Save</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Cansel</button>
+  </form>
+</div>
+</div>
+
+
 </body>
 
 </html>

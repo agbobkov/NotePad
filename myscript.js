@@ -14,42 +14,66 @@ const database = [{
 
 rendering()
 
-// вывод на экран
-
 function rendering() {
-    let numberString = 1; // задаем начальный номер строки
+    let numberString = 1; // set first number string
 
-    database.forEach(function (obj) { // перебираем массив, получая каждый элемент массива (то есть объект) отдельно
-        let tableStart = document.getElementById('tableStart'); // элемент куда вставляем строки
+    database.forEach(function (obj) { // iterate over the array, getting each element (object) separately
+        let tableStart = document.getElementById('tableStart'); // element for paste row
         tableStart.insertAdjacentHTML('beforeend', '\
         <div class="grid-item"> ' + numberString + ' </div> \
         <div class="grid-item"> ' + obj.name + '</div> \
         <div class="grid-item"> ' + obj.tel + ' </div> \
-        <div class="grid-item"> <button onclick="deleteObject(this)" id="' + obj.id + '">Delete</button> </div> \
+        <div class="grid-item"> <button onclick="removeByIdButton(this)" id="' + obj.id + '">Delete</button> </div> \
          ')
         numberString += 1;
     });
 }
 
-// удаляем строки таблицы, которые были добавлены
-
-function deleteObject(button) {
-    let rowsForDelete = document.querySelectorAll('div[class="grid-item"]'); // получаем набор всех добавленных элементов (строк)
-    for (let elem of rowsForDelete) // перебираем все выбранные элементы, удаляя их
-        elem.remove();   // удаляем все отрисованные строки
-    removeByIdButton(button);  // вызываем функцию удаления объекта
-};
-
-// удаляем объект из массива
+// delete object from array
 
 function removeByIdButton(button) {
-    let idButton = button.id; // получаем id кнопки равное id объекта
+    let idButton = button.id; // get id button
 
-    let indexArrayForDelete = database.findIndex(function (obj) { // перебираем каждый объект в массиве
-        return obj.id === idButton // если ключ .id перебираемого объекта равен значению id кнопки возвращаем значение элемента массива
+    let indexArrayForDelete = database.findIndex(function (obj) { // iterate every object in array
+        return obj.id === idButton // searsh index of element for delete
     });
 
-    database.splice(indexArrayForDelete, 1); // удаляем объект из массива
-    console.log(database);
-    rendering() // отрисовываем таблицу заново
+    database.splice(indexArrayForDelete, 1); // delete find element from array
+
+    deleteTable();
+    rendering()
 };
+
+// deleteTable
+
+function deleteTable() {
+    let rowsForDelete = document.querySelectorAll('div[class="grid-item"]'); // get all row which rendered
+    for (let elem of rowsForDelete)
+        elem.remove();
+};
+
+// popup
+
+function openForm() {
+    document.getElementById("formAdd").style.display = "block";
+}
+
+function closeForm() {
+    document.getElementById("formAdd").style.display = "none";
+}
+
+function addNote() {
+    let form = document.forms[0]; // get form
+    let name = form.elements.name.value; // get name from form
+    let phone = form.elements.phone.value; // get phone from form
+    let newNote = {
+        id: String(Math.random()),
+        name: name,
+        tel: phone
+    };
+    database.push(newNote) // add new object in database
+
+    closeForm();
+    deleteTable()
+    rendering();
+}

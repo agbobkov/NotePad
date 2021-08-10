@@ -23,3 +23,67 @@
     padding: 10px;
 }
 
+.button-add {
+    font-size: 15px;
+    font-weight: bold;
+    padding: 5px 10px;
+    cursor: pointer;
+    opacity: 0.9;
+    margin-top: 10px;
+  }
+
+  .popup {
+      display: none;
+  }
+
+  .form-popup {
+    display: flex;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgb(117, 114, 114, 0.8);
+    }
+
+   .form-container {
+    max-width: 300px;
+    padding: 10px;
+    background-color: white;
+    margin: auto;
+    
+  }
+
+  .form-container input[type=text], .form-container input[type=tel] {
+    width: 90%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+  }
+
+  .form-container input[type=text]:focus, .form-container input[type=tel]:focus {
+    background-color: #ddd;
+    outline: none;
+  }
+
+  .form-container .btn {
+    background-color: #1976D2;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom:10px;
+    opacity: 0.8;
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  .form-container .cancel {
+    background-color: #448AFF;
+  }
+  
+  .form-container .btn:hover, .button-add:hover {
+    opacity: 1;
+  }
