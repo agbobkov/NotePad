@@ -23,7 +23,8 @@ function rendering() {
         <div class="grid-item"> ' + numberString + ' </div> \
         <div class="grid-item"> ' + obj.name + '</div> \
         <div class="grid-item"> ' + obj.tel + ' </div> \
-        <div class="grid-item"> <button onclick="removeByIdButton(this)" id="' + obj.id + '">Delete</button> </div> \
+        <div class="grid-item"> <button onclick="editByAttrButton(this)" idObject="' + obj.id + '">Edit</button> </div> \
+        <div class="grid-item"> <button onclick="removeByAttrButton(this)" idObject="' + obj.id + '">Delete</button> </div> \
          ')
         numberString += 1;
     });
@@ -31,11 +32,11 @@ function rendering() {
 
 // delete object from array
 
-function removeByIdButton(button) {
-    let idButton = button.id; // get id button
+function removeByAttrButton(button) {
+    let idObject = button.getAttribute("idObject"); // get id button
 
     let indexArrayForDelete = database.findIndex(function (obj) { // iterate every object in array
-        return obj.id === idButton // searsh index of element for delete
+        return obj.id === idObject // searsh index of element for delete
     });
 
     database.splice(indexArrayForDelete, 1); // delete find element from array
@@ -55,11 +56,18 @@ function deleteTable() {
 // popup
 
 function openForm() {
-    document.getElementById("formAdd").style.display = "block";
+    document.getElementById("popupFormAdd").style.display = "block";
 }
 
 function closeForm() {
-    document.getElementById("formAdd").style.display = "none";
+    document.getElementById("popupFormAdd").style.display = "none";
+    resetForm()
+}
+
+function resetForm() {
+    document.getElementById("formAdd").reset();
+    document.getElementById('message-fault').innerHTML = '';
+    document.forms[0].elements.phone.style.border = "none";
 }
 
 function addNote() {
@@ -71,9 +79,43 @@ function addNote() {
         name: name,
         tel: phone
     };
-    database.push(newNote) // add new object in database
 
-    closeForm();
-    deleteTable()
-    rendering();
+    let isPhoneNumberValid = validPhone();
+    if (isPhoneNumberValid) {
+        closeForm();
+        deleteTable();
+        database.push(newNote) // add new object in database
+        rendering();
+    };
+};
+
+
+function validPhone() {
+    // debugger;
+    let pattern = /^\d[\d\(\)\ -]{4,14}\d$/;
+    //  let phone = document.forms[0].elements.phone.value; // get element input-phone from form
+    let inputPhone = document.forms[0].elements.phone;
+    let inputPhoneValue = inputPhone.value;
+
+    let correctNumber = pattern.test(inputPhoneValue); // return true or false
+    let newNumber = database.findIndex(function (obj) { // iterate every object in array
+        return obj.tel === inputPhoneValue // searsh index of phone number, if it is
+    });
+
+    if (correctNumber === false) { // check is number correct
+        inputPhone.style.border = "2px solid red";
+        document.getElementById('message-fault').innerHTML = 'Номер телефона введен неправильно!';
+        return false;
+    };
+
+    if (newNumber > -1) { // check is number exist
+        inputPhone.style.border = "2px solid red";
+        document.getElementById('message-fault').innerHTML = 'Такой номер телефона уже существует!';
+        return false;
+    };
+    return true;
+
+
+    //   else output = console.log('Номер телефона введен неправильно!');
+    //  return correctNumber;
 }
