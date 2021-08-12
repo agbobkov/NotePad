@@ -17,13 +17,13 @@ rendering()
 function rendering() {
     let numberString = 1; // set first number string
 
-    database.forEach(function (obj) { // iterate over the array, getting each element (object) separately
+    database.forEach((obj) => { // iterate over the array, getting each element (object) separately
         let tableStart = document.getElementById('tableStart'); // element for paste row
         tableStart.insertAdjacentHTML('beforeend', '\
         <div class="grid-item"> ' + numberString + ' </div> \
         <div class="grid-item"> ' + obj.name + '</div> \
         <div class="grid-item"> ' + obj.tel + ' </div> \
-        <div class="grid-item"> <button onclick="editByAttrButton(this)" idObject="' + obj.id + '">Edit</button> </div> \
+        <div class="grid-item"> <button onclick="openEditForm(this)" idObject="' + obj.id + '">Edit</button> </div> \
         <div class="grid-item"> <button onclick="removeByAttrButton(this)" idObject="' + obj.id + '">Delete</button> </div> \
          ')
         numberString += 1;
@@ -34,11 +34,9 @@ function rendering() {
 
 function removeByAttrButton(button) {
     let idObject = button.getAttribute("idObject"); // get id button
-
-    let indexArrayForDelete = database.findIndex(function (obj) { // iterate every object in array
-        return obj.id === idObject // searsh index of element for delete
-    });
-
+    let indexArrayForDelete = database.findIndex((obj) => {
+        return obj.id === idObject
+    }); // iterate every object in array searsh index of element for delete
     database.splice(indexArrayForDelete, 1); // delete find element from array
 
     deleteTable();
@@ -53,13 +51,13 @@ function deleteTable() {
         elem.remove();
 };
 
-// popup
+// popup Add
 
-function openForm() {
+function openFormAdd() {
     document.getElementById("popupFormAdd").style.display = "block";
 }
 
-function closeForm() {
+function closeFormAdd() {
     document.getElementById("popupFormAdd").style.display = "none";
     resetForm()
 }
@@ -82,7 +80,7 @@ function addNote() {
 
     let isPhoneNumberValid = validPhone();
     if (isPhoneNumberValid) {
-        closeForm();
+        closeFormAdd();
         deleteTable();
         database.push(newNote) // add new object in database
         rendering();
@@ -91,31 +89,62 @@ function addNote() {
 
 
 function validPhone() {
-    // debugger;
-    let pattern = /^\d[\d\(\)\ -]{4,14}\d$/;
-    //  let phone = document.forms[0].elements.phone.value; // get element input-phone from form
-    let inputPhone = document.forms[0].elements.phone;
-    let inputPhoneValue = inputPhone.value;
+    let pattern = /^\d[\d\(\)\ -]{2,16}\d$/;
+    let inputPhoneValue = document.forms[0].elements.phone.value;
 
     let correctNumber = pattern.test(inputPhoneValue); // return true or false
-    let newNumber = database.findIndex(function (obj) { // iterate every object in array
-        return obj.tel === inputPhoneValue // searsh index of phone number, if it is
-    });
+    let newNumber = database.findIndex((obj) => {
+        return obj.tel === inputPhoneValue
+    }); // iterate every object in array searsh index of phone number, if it is
+
 
     if (correctNumber === false) { // check is number correct
-        inputPhone.style.border = "2px solid red";
-        document.getElementById('message-fault').innerHTML = 'Номер телефона введен неправильно!';
+        setStylePhoneInputInvalid()
+        document.getElementById('message-fault').innerHTML = 'Номер телефона введен не корректно!';
         return false;
     };
 
     if (newNumber > -1) { // check is number exist
-        inputPhone.style.border = "2px solid red";
+        setStylePhoneInputInvalid()
         document.getElementById('message-fault').innerHTML = 'Такой номер телефона уже существует!';
         return false;
     };
     return true;
+}
+
+function setStylePhoneInputInvalid() {
+    document.forms[0].elements.phone.style.border = "2px solid red";
+}
+
+// popup Edit
 
 
-    //   else output = console.log('Номер телефона введен неправильно!');
-    //  return correctNumber;
+let numberElementForEdit = { // object for save number element for edit
+    number: ""
+};
+
+function openEditForm(button) {
+    document.getElementById("popupFormEdit").style.display = "block";
+    let idObject = button.getAttribute("idObject"); // get id button
+    let inputName = document.forms[1].elements.name
+    let inputPhone = document.forms[1].elements.phone
+    let i = database.findIndex((obj) => {
+        return obj.id === idObject
+    });
+    let findName = database[i].name;
+    let findPhone = database[i].tel;
+    inputName.setAttribute("value", findName);
+    inputPhone.setAttribute("value", findPhone);
+    numberElementForEdit.number = i;
+}
+
+
+function closeFormEdit() {
+    document.getElementById("popupFormEdit").style.display = "none";
+    resetForm()
+}
+
+function editNote() {
+    let elementForEdit = numberElementForEdit.number;
+    console.log(elementForEdit);
 }

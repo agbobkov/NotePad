@@ -2,44 +2,64 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Document</title>
 </head>
 
 <body>
 
-    <div class="grid-container" id="tableStart">
-        <div class="grid-item-head">№ п/п</div>
-        <div class="grid-item-head">ФИО</div>
-        <div class="grid-item-head">Телефон</div>
-        <div class="grid-item-head">Кнопка</div>
-        <div class="grid-item-head">Кнопка</div>        
+  <div class="grid-container" id="tableStart">
+    <div class="grid-item-head">№ п/п</div>
+    <div class="grid-item-head">ФИО</div>
+    <div class="grid-item-head">Телефон</div>
+    <div class="grid-item-head">Кнопка</div>
+    <div class="grid-item-head">Кнопка</div>
+  </div>
+  <script src="myscript.js"> </script>
+
+  <button class="button-add" onclick="openFormAdd()">Add a note</button>
+
+  <!-- popup Add-->
+
+  <div class="popup" id="popupFormAdd">
+    <div class="form-popup">
+      <form onsubmit="addNote();return false;" class="form-container" id="formAdd">
+        <h1>Добавить запись</h1>
+
+        <label for="name"><b>Name</b></label>
+        <input type="text" placeholder="Имя" name="name" required>
+
+        <label for="phone"><b>Phone</b></label>
+        <input type="phone" placeholder="Телефон" name="phone" required>
+        <div id="message-fault" class="message-fault"></div>
+
+        <button type="submit" class="btn">Add</button>
+        <button type="button" class="btn cancel" onclick="closeFormAdd()">Cansel</button>
+      </form>
     </div>
-    <script src="myscript.js"> </script>
+  </div>
 
-<!-- popup -->
-<button class="button-add" onclick="openForm()">Add a note</button>
-<div class="popup" id="popupFormAdd">
-<div class="form-popup">
-  <form onsubmit="addNote();return false;" class="form-container" id="formAdd">
-    <h1>Добавить запись</h1>
+  <!-- popup Edit-->
+  <div class="popup" id="popupFormEdit">
+    <div class="form-popup">
+      <form onsubmit="editNote();return false;" class="form-container" id="formEdit">
+        <h1>Редактировать запись</h1>
 
-    <label for="name"><b>Name</b></label>
-    <input type="text" placeholder="Имя" name="name" required>
-  
-  <label for="phone"><b>Phone</b></label>
-    <input type="phone" placeholder="Телефон" name="phone" required>
-    <div id="message-fault" class="message-fault"></div>
+        <label for="name"><b>Name</b></label>
+        <input type="text" placeholder="Имя" name="name" required>
 
-    <button type="submit" class="btn">Save</button>
-    <button type="button" class="btn cancel" onclick="closeForm()">Cansel</button>
-  </form>
-</div>
-</div>
+        <label for="phone"><b>Phone</b></label>
+        <input type="phone" placeholder="Телефон" name="phone" required>
+        <div id="message-fault" class="message-fault"></div>
 
+        <button type="submit" class="btn">Save</button>
+        <button type="button" class="btn cancel" onclick="closeFormEdit()">Cansel</button>
+      </form>
+    </div>
+  </div>
 
 </body>
 
