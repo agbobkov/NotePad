@@ -78,7 +78,7 @@ function addNote() {
         tel: phone
     };
 
-    let isPhoneNumberValid = validPhone();
+    let isPhoneNumberValid = validPhone(0);
     if (isPhoneNumberValid) {
         closeFormAdd();
         deleteTable();
@@ -87,10 +87,10 @@ function addNote() {
     };
 };
 
-
-function validPhone() {
+function validPhone(numberForm) {
     let pattern = /^\d[\d\(\)\ -]{2,16}\d$/;
-    let inputPhoneValue = document.forms[0].elements.phone.value;
+    let form = document.forms[numberForm].elements;
+    let inputPhoneValue = form.phone.value;
 
     let correctNumber = pattern.test(inputPhoneValue); // return true or false
     let newNumber = database.findIndex((obj) => {
@@ -99,27 +99,24 @@ function validPhone() {
 
 
     if (correctNumber === false) { // check is number correct
-        setStylePhoneInputInvalid()
-        document.getElementById('message-fault').innerHTML = 'Номер телефона введен не корректно!';
+        form.phone.style.border = "2px solid red";
+        console.log(document.getElementsByClassName('message-fault')[numberForm])
+        document.getElementsByClassName('message-fault')[numberForm].innerHTML = 'Номер телефона введен не корректно!';
+        //   document.getElementById('message-fault').innerHTML = 'Номер телефона введен не корректно!';
         return false;
     };
 
     if (newNumber > -1) { // check is number exist
-        setStylePhoneInputInvalid()
-        document.getElementById('message-fault').innerHTML = 'Такой номер телефона уже существует!';
+        form.phone.style.border = "2px solid red";
+        document.getElementsByClassName('message-fault')[numberForm].innerHTML = 'Такой номер телефона уже существует!';
         return false;
     };
     return true;
 }
 
-function setStylePhoneInputInvalid() {
-    document.forms[0].elements.phone.style.border = "2px solid red";
-}
-
 // popup Edit
 
-
-let numberElementForEdit = { // object for save number element for edit
+let numberElementForEdit = { // object for save index array for edit
     number: ""
 };
 
@@ -138,13 +135,22 @@ function openEditForm(button) {
     numberElementForEdit.number = i;
 }
 
-
 function closeFormEdit() {
     document.getElementById("popupFormEdit").style.display = "none";
     resetForm()
 }
 
 function editNote() {
-    let elementForEdit = numberElementForEdit.number;
-    console.log(elementForEdit);
+    let isPhoneNumberValid = validPhone(1);
+    if (isPhoneNumberValid) {
+        let form = document.forms[1]; // get form
+        let name = form.elements.name.value; // get name from form
+        let phone = form.elements.phone.value; // get phone from form
+        let elementForEdit = numberElementForEdit.number; // get index array for edit
+        database[elementForEdit].name = name;
+        database[elementForEdit].tel = phone;
+        closeFormEdit();
+        deleteTable();
+        rendering();
+    };
 }
