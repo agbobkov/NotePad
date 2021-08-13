@@ -59,13 +59,13 @@ function openFormAdd() {
 
 function closeFormAdd() {
     document.getElementById("popupFormAdd").style.display = "none";
-    resetForm()
+    resetForm(0)
 }
 
-function resetForm() {
-    document.getElementById("formAdd").reset();
-    document.getElementById('message-fault').innerHTML = '';
-    document.forms[0].elements.phone.style.border = "none";
+function resetForm(numberForm) {
+    document.forms[numberForm].reset();
+    document.getElementsByClassName('message-fault')[numberForm].innerHTML = '';
+    document.forms[numberForm].elements.phone.style.border = "none";
 }
 
 function addNote() {
@@ -100,7 +100,6 @@ function validPhone(numberForm) {
 
     if (correctNumber === false) { // check is number correct
         form.phone.style.border = "2px solid red";
-        console.log(document.getElementsByClassName('message-fault')[numberForm])
         document.getElementsByClassName('message-fault')[numberForm].innerHTML = 'Номер телефона введен не корректно!';
         //   document.getElementById('message-fault').innerHTML = 'Номер телефона введен не корректно!';
         return false;
@@ -133,24 +132,42 @@ function openEditForm(button) {
     inputName.setAttribute("value", findName);
     inputPhone.setAttribute("value", findPhone);
     numberElementForEdit.number = i;
+
+    let buttonSubmit = document.forms[1].querySelector("button[type=submit]");
+    buttonSubmit.setAttribute("disabled", "disabled");
+    buttonSubmit.setAttribute("class", "disabled");
+}
+
+function activationButton() {
+    //  let input = document.getElementById("inputButton");
+    let buttonSubmit = document.forms[1].querySelector("button[type=submit]");
+    buttonSubmit.removeAttribute("disabled");
+    buttonSubmit.setAttribute("class", "btn");
 }
 
 function closeFormEdit() {
     document.getElementById("popupFormEdit").style.display = "none";
-    resetForm()
+    resetForm(1)
 }
 
 function editNote() {
-    let isPhoneNumberValid = validPhone(1);
-    if (isPhoneNumberValid) {
-        let form = document.forms[1]; // get form
-        let name = form.elements.name.value; // get name from form
-        let phone = form.elements.phone.value; // get phone from form
-        let elementForEdit = numberElementForEdit.number; // get index array for edit
+    let form = document.forms[1]; // get form
+    let name = form.elements.name.value; // get name from form
+    let phone = form.elements.phone.value; // get phone from form
+    let elementForEdit = numberElementForEdit.number; // get index array for edit
+
+    if (database[elementForEdit].tel !== phone) {
+        if (validPhone(1)) {
+            database[elementForEdit].name = name;
+            database[elementForEdit].tel = phone;
+            closeFormEdit();
+            deleteTable();
+            rendering();
+        };
+    } else {
         database[elementForEdit].name = name;
-        database[elementForEdit].tel = phone;
         closeFormEdit();
         deleteTable();
         rendering();
-    };
+    }
 }

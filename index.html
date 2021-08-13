@@ -49,10 +49,10 @@
         <h1>Редактировать запись</h1>
 
         <label for="name"><b>Name</b></label>
-        <input type="text" placeholder="Имя" name="name" required>
+        <input type="text" placeholder="Имя" oninput="activationButton()" name="name" required>
 
         <label for="phone"><b>Phone</b></label>
-        <input type="phone" placeholder="Телефон" name="phone" required>
+        <input type="phone" placeholder="Телефон" oninput="activationButton()" name="phone" required>
         <div class="message-fault"></div>
 
         <button type="submit" class="btn">Save</button>
