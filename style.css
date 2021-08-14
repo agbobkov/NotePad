@@ -1,7 +1,7 @@
 .grid-container {
   width: max-content;
   display: grid;
-  grid-template-columns: repeat(5, max-content);
+  grid-template-columns: repeat(6, max-content);
   grid-template-rows: auto;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
@@ -63,8 +63,19 @@
   background: #f1f1f1;
 }
 
+form textarea {
+  width: 90%;
+  height: 50px;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+  resize: none;
+}
+
 .form-container input[type=text]:focus,
-.form-container input[type=phone]:focus {
+.form-container input[type=phone]:focus,
+form textarea:focus {
   background-color: #ddd;
   outline: none;
 }

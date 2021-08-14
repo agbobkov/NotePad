@@ -1,15 +1,23 @@
 const database = [{
     id: "f88201f2-f828-11eb-9a03-0242ac130003",
     name: "Bobkov",
-    tel: "123456444"
+    tel: "123456444",
+    note: "Прилетело НЛО и опубликовало эту запись здесь"
 }, {
     id: "086cc746-f829-11eb-9a03-0242ac130003",
     name: "Gromenko",
-    tel: "987654"
+    tel: "987654",
+    note: ""
 }, {
     id: "41482cde-f8df-11eb-9a03-0242ac130003",
     name: "Lihonin",
-    tel: "543210"
+    tel: "543210",
+    note: "Здесь могла бы быть ваша реклама"
+}, {
+    id: "4984564cde-f8df-11eb-9a03-0242ac130003",
+    name: "Sokolov",
+    tel: "12345",
+    note: ""
 }];
 
 rendering()
@@ -23,6 +31,7 @@ function rendering() {
         <div class="grid-item"> ' + numberString + ' </div> \
         <div class="grid-item"> ' + obj.name + '</div> \
         <div class="grid-item"> ' + obj.tel + ' </div> \
+        <div class="grid-item"> ' + obj.note + ' </div> \
         <div class="grid-item"> <button onclick="openEditForm(this)" idObject="' + obj.id + '">Edit</button> </div> \
         <div class="grid-item"> <button onclick="removeByAttrButton(this)" idObject="' + obj.id + '">Delete</button> </div> \
          ')
@@ -72,10 +81,12 @@ function addNote() {
     let form = document.forms[0]; // get form
     let name = form.elements.name.value; // get name from form
     let phone = form.elements.phone.value; // get phone from form
+    let note = form.querySelector('textarea').value; // get comment from form
     let newNote = {
         id: String(Math.random()),
         name: name,
-        tel: phone
+        tel: phone,
+        note: note
     };
 
     let isPhoneNumberValid = validPhone(0);
@@ -124,23 +135,22 @@ function openEditForm(button) {
     let idObject = button.getAttribute("idObject"); // get id button
     let inputName = document.forms[1].elements.name
     let inputPhone = document.forms[1].elements.phone
+    let inputNote = document.forms[1].querySelector('textarea'); // get comment from form
     let i = database.findIndex((obj) => {
         return obj.id === idObject
     });
     let findName = database[i].name;
     let findPhone = database[i].tel;
+    let findNote = database[i].note;
     inputName.setAttribute("value", findName);
     inputPhone.setAttribute("value", findPhone);
+    inputNote.innerHTML = findNote;
     numberElementForEdit.number = i;
 
-    let buttonSubmit = document.forms[1].querySelector("button[type=submit]");
-    buttonSubmit.setAttribute("disabled", "disabled");
-    buttonSubmit.setAttribute("class", "disabled");
 }
 
 function activationButton() {
-    //  let input = document.getElementById("inputButton");
-    let buttonSubmit = document.forms[1].querySelector("button[type=submit]");
+    let buttonSubmit = document.forms[1].querySelector('button[type="submit"]');
     buttonSubmit.removeAttribute("disabled");
     buttonSubmit.setAttribute("class", "btn");
 }
@@ -154,18 +164,21 @@ function editNote() {
     let form = document.forms[1]; // get form
     let name = form.elements.name.value; // get name from form
     let phone = form.elements.phone.value; // get phone from form
+    let note = document.forms[1].querySelector('textarea').value; // get comment from form
     let elementForEdit = numberElementForEdit.number; // get index array for edit
 
     if (database[elementForEdit].tel !== phone) {
         if (validPhone(1)) {
             database[elementForEdit].name = name;
             database[elementForEdit].tel = phone;
+            database[elementForEdit].note = note;
             closeFormEdit();
             deleteTable();
             rendering();
         };
     } else {
         database[elementForEdit].name = name;
+        database[elementForEdit].note = note;
         closeFormEdit();
         deleteTable();
         rendering();

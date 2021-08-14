@@ -15,6 +15,7 @@
     <div class="grid-item-head">№ п/п</div>
     <div class="grid-item-head">ФИО</div>
     <div class="grid-item-head">Телефон</div>
+    <div class="grid-item-head">Заметка</div>
     <div class="grid-item-head">Кнопка</div>
     <div class="grid-item-head">Кнопка</div>
   </div>
@@ -30,11 +31,14 @@
         <h1>Добавить запись</h1>
 
         <label for="name"><b>Name</b></label>
-        <input type="text" placeholder="Имя" name="name" required>
+        <input type="text" placeholder="Имя (обязательно)" name="name" required>
 
         <label for="phone"><b>Phone</b></label>
-        <input type="phone" placeholder="Телефон" name="phone" required>
+        <input type="phone" placeholder="Телефон (обязательно)" name="phone" required>
         <div class="message-fault"></div>
+
+        <b>Note</b><br>
+        <textarea placeholder="Комментарий"></textarea>
 
         <button type="submit" class="btn">Add</button>
         <button type="button" class="btn cancel" onclick="closeFormAdd()">Cansel</button>
@@ -55,7 +59,10 @@
         <input type="phone" placeholder="Телефон" oninput="activationButton()" name="phone" required>
         <div class="message-fault"></div>
 
-        <button type="submit" class="btn">Save</button>
+        <b>Note</b><br>
+        <textarea placeholder="Комментарий" oninput="activationButton()"></textarea>
+
+        <button type="submit" class="disabled" disabled>Save</button>
         <button type="button" class="btn cancel" onclick="closeFormEdit()">Cansel</button>
       </form>
     </div>
