@@ -1,69 +1,92 @@
-let promise = new Promise((resolve, reject) => {
-    // эта функция выполнится автоматически, при вызове new Promise
+const db = [{
+    id: "f88201f2-f828-11eb-9a03-0242ac130003",
+    name: "Bobkov",
+    tel: "123456444",
+    note: "Прилетело НЛО и опубликовало эту запись здесь"
+}, {
+    id: "086cc746-f829-11eb-9a03-0242ac130003",
+    name: "Gromenko",
+    tel: "987654",
+    note: ""
+}, {
+    id: "41482cde-f8df-11eb-9a03-0242ac130003",
+    name: "Lihonin",
+    tel: "543210",
+    note: "Здесь могла бы быть ваша реклама"
+}, {
+    id: "4984564cde-f8df-11eb-9a03-0242ac130003",
+    name: "Sokolov",
+    tel: "12345",
+    note: ""
+}];
 
-    // через 2 секунды создать клон БД
-    setTimeout(() => resolve(db.map(a => ({
+let database = [];
+
+let loadPage = async () => {
+    return db
+};
+
+loadPage().then((value) => {
+    database = value.map(a => ({
         ...a
-    }))), 2000);
+    }));
+    rendering();
+})
 
-});
+debugger
+ rendering()
 
-let database = promise.then((result) => console.log(result));
-console.log(database)
+function rendering() {
+    let numberString = 1; // set first number string
 
+    database.forEach((obj) => { // iterate over the array, getting each element (object) separately
+        let tableStart = document.getElementById('tableStart'); // element for paste row
+        tableStart.insertAdjacentHTML('beforeend', '\
+        <div class="grid-item"> ' + numberString + ' </div> \
+        <div class="grid-item"> ' + obj.name + '</div> \
+        <div class="grid-item"> ' + obj.tel + ' </div> \
+        <div class="grid-item"> ' + obj.note + ' </div> \
+        <div class="grid-item"> <button onclick="openEditForm(this)" idObject="' + obj.id + '">Edit</button> </div> \
+        <div class="grid-item"> <button onclick="removeByAttrButton(this)" idObject="' + obj.id + '">Delete</button> </div> \
+         ')
+        numberString += 1;
+    });
+}
 
+// delete object from array
 
-//  let database = async () => {
-//     setTimeout(() => {
-//       return db.map(a => ({
-//                     ...a
-//                 }))
-//       }, 2000)
-//  };
+let numberElementForDelete = { // index array "db" for delete
+    number: ""
+};
 
+function removeByAttrButton(button) {
+    let idObject = button.getAttribute("idObject"); // get id button
+    let indexArrayForDelete = database.findIndex((obj) => {
+        return obj.id === idObject
+    }); // iterate every object in array searsh index of element for delete
+    numberElementForDelete.number = indexArrayForDelete;
+    deleteObject().then((value) => {
+        deleteTable()
+        database = value.map(a => ({
+            ...a
+        }));
+        rendering()
+    });
 
+};
 
-// rendering()
+let deleteObject = async () => {
+    db.splice(numberElementForDelete.number, 1);
+    return db
+};
 
-// function rendering() {
-//     let numberString = 1; // set first number string
+function deleteTable() {
+    let rowsForDelete = document.querySelectorAll('div[class="grid-item"]'); // get all row which rendered
+    for (let elem of rowsForDelete)
+        elem.remove();
+};
 
-//     database.forEach((obj) => { // iterate over the array, getting each element (object) separately
-//         let tableStart = document.getElementById('tableStart'); // element for paste row
-//         tableStart.insertAdjacentHTML('beforeend', '\
-//         <div class="grid-item"> ' + numberString + ' </div> \
-//         <div class="grid-item"> ' + obj.name + '</div> \
-//         <div class="grid-item"> ' + obj.tel + ' </div> \
-//         <div class="grid-item"> ' + obj.note + ' </div> \
-//         <div class="grid-item"> <button onclick="openEditForm(this)" idObject="' + obj.id + '">Edit</button> </div> \
-//         <div class="grid-item"> <button onclick="removeByAttrButton(this)" idObject="' + obj.id + '">Delete</button> </div> \
-//          ')
-//         numberString += 1;
-//     });
-// }
-
-// // delete object from array
-
-// function removeByAttrButton(button) {
-//     let idObject = button.getAttribute("idObject"); // get id button
-//     let indexArrayForDelete = database.findIndex((obj) => {
-//         return obj.id === idObject
-//     }); // iterate every object in array searsh index of element for delete
-//     database.splice(indexArrayForDelete, 1); // delete find element from array
-
-//     deleteTable();
-//     rendering()
-// };
-
-// // deleteTable
-
-// function deleteTable() {
-//     let rowsForDelete = document.querySelectorAll('div[class="grid-item"]'); // get all row which rendered
-//     for (let elem of rowsForDelete)
-//         elem.remove();
-// };
-
-// // popup Add
+// popup Add
 
 // function openFormAdd() {
 //     document.getElementById("popupFormAdd").style.display = "block";
@@ -187,355 +210,3 @@ console.log(database)
 //         rendering();
 //     }
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const db = [{
-    id: "f88201f2-f828-11eb-9a03-0242ac130003",
-    name: "Bobkov",
-    tel: "123456444",
-    note: "Прилетело НЛО и опубликовало эту запись здесь"
-}, {
-    id: "086cc746-f829-11eb-9a03-0242ac130003",
-    name: "Gromenko",
-    tel: "987654",
-    note: ""
-}, {
-    id: "41482cde-f8df-11eb-9a03-0242ac130003",
-    name: "Lihonin",
-    tel: "543210",
-    note: "Здесь могла бы быть ваша реклама"
-}, {
-    id: "4984564cde-f8df-11eb-9a03-0242ac130003",
-    name: "Sokolov",
-    tel: "12345",
-    note: ""
-}];
-
