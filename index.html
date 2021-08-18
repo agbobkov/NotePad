@@ -21,27 +21,27 @@
   </div>
   <script src="myscript.js"> </script>
 
-  <button class="button-add" onclick="openFormAdd()">Add a note</button>
+  <button class="button-add" onclick="openForm('popupFormAdd')">Add a note</button>
 
   <!-- popup Add-->
 
   <div class="popup" id="popupFormAdd">
     <div class="form-popup">
-      <form onsubmit="addNote();return false;" class="form-container" id="formAdd">
+      <form onsubmit="addNote();return false;" class="form-container" id="formAdd" name="formAdd">
         <h1>Добавить запись</h1>
 
         <label for="name"><b>Name</b></label>
-        <input type="text" placeholder="Имя (обязательно)" name="name" required>
+        <input type="text" placeholder="Имя (обязательно)" oninput="activationButton('formAdd')" name="name" required>
 
         <label for="phone"><b>Phone</b></label>
-        <input type="phone" placeholder="Телефон (обязательно)" name="phone" required>
+        <input type="phone" placeholder="Телефон (обязательно)" oninput="activationButton('formAdd')" name="phone" required>
         <div class="message-fault"></div>
 
         <b>Note</b><br>
         <textarea placeholder="Комментарий"></textarea>
 
-        <button type="submit" class="btn">Add</button>
-        <button type="button" class="btn cancel" onclick="closeFormAdd()">Cansel</button>
+        <button type="submit" class="disabled">Add</button>
+        <button type="button" class="btn cancel" oninput="activationButton('formAdd')" onclick="closeForm('popupFormAdd')">Cansel</button>
       </form>
     </div>
   </div>

@@ -33,8 +33,7 @@ loadPage().then((value) => {
     rendering();
 })
 
-debugger
- rendering()
+rendering()
 
 function rendering() {
     let numberString = 1; // set first number string
@@ -53,30 +52,24 @@ function rendering() {
     });
 }
 
-// delete object from array
-
-let numberElementForDelete = { // index array "db" for delete
-    number: ""
-};
+// delete object
 
 function removeByAttrButton(button) {
     let idObject = button.getAttribute("idObject"); // get id button
-    let indexArrayForDelete = database.findIndex((obj) => {
-        return obj.id === idObject
-    }); // iterate every object in array searsh index of element for delete
-    numberElementForDelete.number = indexArrayForDelete;
-    deleteObject().then((value) => {
+    deleteObject(idObject).then((value) => {
         deleteTable()
         database = value.map(a => ({
             ...a
         }));
         rendering()
     });
-
 };
 
-let deleteObject = async () => {
-    db.splice(numberElementForDelete.number, 1);
+let deleteObject = async (idObject) => {
+    let indexArrayForDelete = database.findIndex((obj) => {
+        return obj.id === idObject
+    }); // iterate every object in array searsh index of element for delete
+    db.splice(indexArrayForDelete, 1);
     return db
 };
 
@@ -86,69 +79,98 @@ function deleteTable() {
         elem.remove();
 };
 
-// popup Add
+// open, clouse and reset form
 
-// function openFormAdd() {
-//     document.getElementById("popupFormAdd").style.display = "block";
-// }
+function openForm(popupId) {
+    document.getElementById(popupId).style.display = "block";
+}
 
-// function closeFormAdd() {
-//     document.getElementById("popupFormAdd").style.display = "none";
-//     resetForm(0)
-// }
+function closeForm(popupId) {
+    document.getElementById(popupId).style.display = "none";
+    resetForm("formAdd")
+}
 
-// function resetForm(numberForm) {
-//     document.forms[numberForm].reset();
-//     document.getElementsByClassName('message-fault')[numberForm].innerHTML = '';
-//     document.forms[numberForm].elements.phone.style.border = "none";
-// }
+function activationButton(nameForm) {
+    let buttonSubmit = document.forms[nameForm].querySelector('button[type="submit"]');
+    buttonSubmit.removeAttribute("disabled");
+    buttonSubmit.setAttribute("class", "btn");
+}
 
-// function addNote() {
-//     let form = document.forms[0]; // get form
-//     let name = form.elements.name.value; // get name from form
-//     let phone = form.elements.phone.value; // get phone from form
-//     let note = form.querySelector('textarea').value; // get comment from form
-//     let newNote = {
-//         id: String(Math.random()),
-//         name: name,
-//         tel: phone,
-//         note: note
-//     };
+function resetForm(nameForm) {
+    let form = document.forms[nameForm];
+    form.reset();
+    form.querySelector('textarea').value = '';
+    form.elements['phone'].style.border = "none";
 
-//     let isPhoneNumberValid = validPhone(0);
-//     if (isPhoneNumberValid) {
-//         closeFormAdd();
-//         deleteTable();
-//         database.push(newNote) // add new object in database
-//         rendering();
-//     };
-// };
+    let buttonSubmit = form.querySelector('button[type="submit"]');
+    buttonSubmit.setAttribute("disabled", "disabled");
+    buttonSubmit.setAttribute("class", "disabled");
+}
 
-// function validPhone(numberForm) {
-//     let pattern = /^\d[\d\(\)\ -]{2,16}\d$/;
-//     let form = document.forms[numberForm].elements;
-//     let inputPhoneValue = form.phone.value;
+// Add object
 
-//     let correctNumber = pattern.test(inputPhoneValue); // return true or false
-//     let newNumber = database.findIndex((obj) => {
-//         return obj.tel === inputPhoneValue
-//     }); // iterate every object in array searsh index of phone number, if it is
+function addNote() {
+    let form = document.forms['formAdd']; // get form
+    let name = form.elements['name'].value; // get name from form
+    let phone = form.elements['phone'].value; // get phone from form
+    let note = form.querySelector('textarea').value; // get comment from form
+
+    let isPhoneNumberValid = validPhone('formAdd');
+    if (isPhoneNumberValid) {
+        closeForm('popupFormAdd');
+        let newNote = {
+            name: name,
+            tel: phone,
+            note: note
+        };
+        addObject(newNote).then((value) => {
+            deleteTable()
+            database = value.map(a => ({
+                ...a
+            }));
+            rendering()
+        });
+    };
+};
+
+let addObject = async (newNote) => {
+    let objectForAdd = Object.assign({
+        id: String(Math.random())
+    }, newNote);
+    db.push(objectForAdd) // add new object in db
+    return db
+};
+
+// valid Phone
+
+function validPhone(nameForm) {
+    let pattern = /^\d[\d\(\)\ -]{2,16}\d$/;
+    let form = document.forms[nameForm];
+    let inputPhoneValue = form.elements['phone'].value;
+
+    let correctNumber = pattern.test(inputPhoneValue); // return true or false
+    let newNumber = database.findIndex((obj) => {
+        return obj.tel === inputPhoneValue
+    }); // iterate every object in array searsh index of phone number, if it is
 
 
-//     if (correctNumber === false) { // check is number correct
-//         form.phone.style.border = "2px solid red";
-//         document.getElementsByClassName('message-fault')[numberForm].innerHTML = 'Номер телефона введен не корректно!';
-//         //   document.getElementById('message-fault').innerHTML = 'Номер телефона введен не корректно!';
-//         return false;
-//     };
+    if (correctNumber === false) { // check is number correct
+        form.elements['phone'].style.border = "2px solid red";
+        form.querySelector('div').innerHTML = 'Номер телефона введен не корректно!';
+        //   document.getElementById('message-fault').innerHTML = 'Номер телефона введен не корректно!';
+        return false;
+    };
 
-//     if (newNumber > -1) { // check is number exist
-//         form.phone.style.border = "2px solid red";
-//         document.getElementsByClassName('message-fault')[numberForm].innerHTML = 'Такой номер телефона уже существует!';
-//         return false;
-//     };
-//     return true;
-// }
+    if (newNumber > -1) { // check is number exist
+        form.elements['phone'].style.border = "2px solid red";
+        form.querySelector('div').innerHTML = 'Такой номер телефона уже существует!';
+        return false;
+    };
+    return true;
+};
+
+
+
 
 // // popup Edit
 
@@ -175,11 +197,6 @@ function deleteTable() {
 
 // }
 
-// function activationButton() {
-//     let buttonSubmit = document.forms[1].querySelector('button[type="submit"]');
-//     buttonSubmit.removeAttribute("disabled");
-//     buttonSubmit.setAttribute("class", "btn");
-// }
 
 // function closeFormEdit() {
 //     document.getElementById("popupFormEdit").style.display = "none";
