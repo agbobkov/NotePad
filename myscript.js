@@ -85,9 +85,9 @@ function openForm(popupId) {
     document.getElementById(popupId).style.display = "block";
 }
 
-function closeForm(popupId) {
+function closeForm(popupId, nameForm) {
     document.getElementById(popupId).style.display = "none";
-    resetForm("formAdd")
+    resetForm(nameForm)
 }
 
 function activationButton(nameForm) {
@@ -170,60 +170,83 @@ function validPhone(nameForm) {
 };
 
 
+// popup Edit
+
+let tempObject = { // object for save index array for edit
+    id: "",
+    index: ""
+};
+
+function openEditForm(button) {
+    document.getElementById("popupFormEdit").style.display = "block";
+    let idObject = button.getAttribute("idObject"); // get id button
+    let i = database.findIndex((obj) => {
+        return obj.id === idObject
+    });
+
+    let findName = database[i].name;
+    let findPhone = database[i].tel;
+    let findNote = database[i].note;
+
+    let form = document.forms['formEdit'] // get form
+    form.elements['name'].setAttribute("value", findName) // get input name
+    form.elements['phone'].setAttribute("value", findPhone) // get input phone
+    form.querySelector('textarea').value = findNote; // get comment from form
+
+    tempObject.id = idObject;
+    tempObject.index = i;
+};
 
 
-// // popup Edit
+function editNote() {
+    let form = document.forms['formEdit']; // get form
+    let name = form.elements['name'].value; // get name from form
+    let phone = form.elements['phone'].value; // get phone from form
+    let note = form.querySelector('textarea').value; // get comment from form
 
-// let numberElementForEdit = { // object for save index array for edit
-//     number: ""
-// };
+    let elementForEdit = tempObject.index; // get index array for edit
+    let idObject = tempObject.id;
 
-// function openEditForm(button) {
-//     document.getElementById("popupFormEdit").style.display = "block";
-//     let idObject = button.getAttribute("idObject"); // get id button
-//     let inputName = document.forms[1].elements.name
-//     let inputPhone = document.forms[1].elements.phone
-//     let inputNote = document.forms[1].querySelector('textarea'); // get comment from form
-//     let i = database.findIndex((obj) => {
-//         return obj.id === idObject
-//     });
-//     let findName = database[i].name;
-//     let findPhone = database[i].tel;
-//     let findNote = database[i].note;
-//     inputName.setAttribute("value", findName);
-//     inputPhone.setAttribute("value", findPhone);
-//     inputNote.innerHTML = findNote;
-//     numberElementForEdit.number = i;
+    if (database[elementForEdit].tel !== phone) {
+        let isPhoneNumberValid = validPhone('formEdit')
+        if (isPhoneNumberValid) {
+            closeForm('popupFormEdit', 'formEdit');
+            let objectForEdit = {
+                id: idObject,
+                name: name,
+                tel: phone,
+                note: note
+            };
+            editObject(objectForEdit).then((value) => {
+                deleteTable()
+                database = value.map(a => ({
+                    ...a
+                }));
+                rendering()
+            });
+        };
+    } else {
+        closeForm('popupFormEdit', 'formEdit');
+        let objectForEdit = {
+            id: idObject,
+            name: name,
+            tel: database[elementForEdit].tel,
+            note: note
+        };
+        editObject(objectForEdit).then((value) => {
+            deleteTable()
+            database = value.map(a => ({
+                ...a
+            }));
+            rendering()
+        });
+    };
+};
 
-// }
-
-
-// function closeFormEdit() {
-//     document.getElementById("popupFormEdit").style.display = "none";
-//     resetForm(1)
-// }
-
-// function editNote() {
-//     let form = document.forms[1]; // get form
-//     let name = form.elements.name.value; // get name from form
-//     let phone = form.elements.phone.value; // get phone from form
-//     let note = document.forms[1].querySelector('textarea').value; // get comment from form
-//     let elementForEdit = numberElementForEdit.number; // get index array for edit
-
-//     if (database[elementForEdit].tel !== phone) {
-//         if (validPhone(1)) {
-//             database[elementForEdit].name = name;
-//             database[elementForEdit].tel = phone;
-//             database[elementForEdit].note = note;
-//             closeFormEdit();
-//             deleteTable();
-//             rendering();
-//         };
-//     } else {
-//         database[elementForEdit].name = name;
-//         database[elementForEdit].note = note;
-//         closeFormEdit();
-//         deleteTable();
-//         rendering();
-//     }
-// }
+let editObject = async (editObject) => {
+    let i = db.findIndex((obj) => {
+        return obj.id === editObject.id
+    });
+    db.splice(i, 1, editObject);
+    return db
+};

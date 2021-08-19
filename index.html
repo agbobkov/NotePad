@@ -27,7 +27,7 @@
 
   <div class="popup" id="popupFormAdd">
     <div class="form-popup">
-      <form onsubmit="addNote();return false;" class="form-container" id="formAdd" name="formAdd">
+      <form onsubmit="addNote();return false;" class="form-container" name="formAdd">
         <h1>Добавить запись</h1>
 
         <label for="name"><b>Name</b></label>
@@ -41,7 +41,7 @@
         <textarea placeholder="Комментарий"></textarea>
 
         <button type="submit" class="disabled">Add</button>
-        <button type="button" class="btn cancel" oninput="activationButton('formAdd')" onclick="closeForm('popupFormAdd')">Cansel</button>
+        <button type="button" class="btn cancel" oninput="activationButton('formAdd')" onclick="closeForm('popupFormAdd', 'formAdd')">Cansel</button>
       </form>
     </div>
   </div>
@@ -49,21 +49,21 @@
   <!-- popup Edit-->
   <div class="popup" id="popupFormEdit">
     <div class="form-popup">
-      <form onsubmit="editNote();return false;" class="form-container" id="formEdit">
+      <form onsubmit="editNote();return false;" class="form-container" name="formEdit">
         <h1>Редактировать запись</h1>
 
         <label for="name"><b>Name</b></label>
-        <input type="text" placeholder="Имя" oninput="activationButton()" name="name" required>
+        <input type="text" placeholder="Имя" oninput="activationButton('formEdit')" name="name" required>
 
         <label for="phone"><b>Phone</b></label>
-        <input type="phone" placeholder="Телефон" oninput="activationButton()" name="phone" required>
+        <input type="phone" placeholder="Телефон" oninput="activationButton('formEdit')" name="phone" required>
         <div class="message-fault"></div>
 
         <b>Note</b><br>
-        <textarea placeholder="Комментарий" oninput="activationButton()"></textarea>
+        <textarea placeholder="Комментарий" oninput="activationButton('formEdit')"></textarea>
 
         <button type="submit" class="disabled" disabled>Save</button>
-        <button type="button" class="btn cancel" onclick="closeFormEdit()">Cansel</button>
+        <button type="button" class="btn cancel" onclick="closeForm('popupFormEdit', 'formEdit')">Cansel</button>
       </form>
     </div>
   </div>
