@@ -118,18 +118,22 @@ function addNote() {
 
     let isPhoneNumberValid = validPhone('formAdd');
     if (isPhoneNumberValid) {
-        closeForm('popupFormAdd');
+        closeForm('popupFormAdd', 'formAdd');
         let newNote = {
             name: name,
             tel: phone,
             note: note
         };
         addObject(newNote).then((value) => {
-            deleteTable()
-            database = value.map(a => ({
-                ...a
-            }));
-            rendering()
+            if (value) {
+                deleteTable()
+                loadPage().then((value) => {
+                    database = value.map(a => ({
+                        ...a
+                    }));
+                    rendering();
+                });
+            };
         });
     };
 };
@@ -139,7 +143,7 @@ let addObject = async (newNote) => {
         id: String(Math.random())
     }, newNote);
     db.push(objectForAdd) // add new object in db
-    return db
+    return true
 };
 
 // valid Phone
@@ -221,11 +225,15 @@ function editNote() {
                 note: note
             };
             editObject(objectForEdit).then((value) => {
-                deleteTable()
-                database = value.map(a => ({
-                    ...a
-                }));
-                rendering()
+                if (value) {
+                    deleteTable()
+                    loadPage().then((value) => {
+                        database = value.map(a => ({
+                            ...a
+                        }));
+                        rendering();
+                    });
+                };
             });
         };
     } else {
@@ -237,11 +245,15 @@ function editNote() {
             note: note
         };
         editObject(objectForEdit).then((value) => {
-            deleteTable()
-            database = value.map(a => ({
-                ...a
-            }));
-            rendering()
+            if (value) {
+                deleteTable()
+                loadPage().then((value) => {
+                    database = value.map(a => ({
+                        ...a
+                    }));
+                    rendering();
+                });
+            };
         });
     };
 };
@@ -251,5 +263,5 @@ let editObject = async (editObject) => {
         return obj.id === editObject.id
     });
     db.splice(i, 1, editObject);
-    return db
+    return true
 };
