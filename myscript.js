@@ -57,11 +57,15 @@ function rendering() {
 function removeByAttrButton(button) {
     let idObject = button.getAttribute("idObject"); // get id button
     deleteObject(idObject).then((value) => {
-        deleteTable()
-        database = value.map(a => ({
-            ...a
-        }));
-        rendering()
+        if (value) {
+            deleteTable()
+            loadPage().then((value) => {
+                database = value.map(a => ({
+                    ...a
+                }));
+                rendering();
+            });
+        };
     });
 };
 
@@ -70,7 +74,7 @@ let deleteObject = async (idObject) => {
         return obj.id === idObject
     }); // iterate every object in array searsh index of element for delete
     db.splice(indexArrayForDelete, 1);
-    return db
+    return true
 };
 
 function deleteTable() {
