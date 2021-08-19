@@ -100,6 +100,7 @@ function resetForm(nameForm) {
     let form = document.forms[nameForm];
     form.reset();
     form.querySelector('textarea').value = '';
+    form.querySelector('div').innerHTML = '';
     form.elements['phone'].style.border = "none";
 
     let buttonSubmit = form.querySelector('button[type="submit"]');
@@ -174,7 +175,6 @@ function validPhone(nameForm) {
 
 let tempObject = { // object for save index array for edit
     id: "",
-    index: ""
 };
 
 function openEditForm(button) {
@@ -194,7 +194,6 @@ function openEditForm(button) {
     form.querySelector('textarea').value = findNote; // get comment from form
 
     tempObject.id = idObject;
-    tempObject.index = i;
 };
 
 
@@ -204,8 +203,12 @@ function editNote() {
     let phone = form.elements['phone'].value; // get phone from form
     let note = form.querySelector('textarea').value; // get comment from form
 
-    let elementForEdit = tempObject.index; // get index array for edit
     let idObject = tempObject.id;
+    let elementForEdit = database.findIndex((obj) => { // get index array for edit
+        return obj.id === idObject
+    });
+
+
 
     if (database[elementForEdit].tel !== phone) {
         let isPhoneNumberValid = validPhone('formEdit')
