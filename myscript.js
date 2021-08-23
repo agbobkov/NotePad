@@ -2,40 +2,80 @@ const db = [{
     id: "f88201f2-f828-11eb-9a03-0242ac130003",
     name: "Bobkov",
     phone: [{
-        idUser: 1,
-        mob: "111111",
-        dom: "111112",
-        id: "f88201f2-f828-11eb-9a03-0242ac130003"
+        id: 1,
+        idUser: "f88201f2-f828-11eb-9a03-0242ac130003",
+        phoneNumber: "111111",
+        phoneType: "mobile",
+    }, {
+        id: 2,
+        idUser: "f88201f2-f828-11eb-9a03-0242ac130003",
+        phoneNumber: "111112",
+        phoneType: "home",
+    }, {
+        id: 3,
+        idUser: "f88201f2-f828-11eb-9a03-0242ac130003",
+        phoneNumber: "111113",
+        phoneType: "work",
     }],
     note: "Прилетело НЛО и опубликовало эту запись здесь"
 }, {
     id: "086cc746-f829-11eb-9a03-0242ac130003",
     name: "Gromenko",
     phone: [{
-        idUser: 2,
-        mob: "222221",
-        dom: "222222",
-        id: "086cc746-f829-11eb-9a03-0242ac130003"
+        id: 4,
+        idUser: "086cc746-f829-11eb-9a03-0242ac130003",
+        phoneNumber: "222221",
+        phoneType: "mobile",
+    }, {
+        id: 5,
+        idUser: "086cc746-f829-11eb-9a03-0242ac130003",
+        phoneNumber: "222222",
+        phoneType: "home",
+    }, {
+        id: 6,
+        idUser: "086cc746-f829-11eb-9a03-0242ac130003",
+        phoneNumber: "222223",
+        phoneType: "work",
     }],
     note: ""
 }, {
     id: "41482cde-f8df-11eb-9a03-0242ac130003",
     name: "Lihonin",
     phone: [{
-        idUser: 3,
-        mob: "333331",
-        dom: "333332",
-        id: "41482cde-f8df-11eb-9a03-0242ac130003"
+        id: 7,
+        idUser: "41482cde-f8df-11eb-9a03-0242ac130003",
+        phoneNumber: "",
+        phoneType: "mobile",
+    }, {
+        id: 8,
+        idUser: "41482cde-f8df-11eb-9a03-0242ac130003",
+        phoneNumber: "333332",
+        phoneType: "home",
+    }, {
+        id: 9,
+        idUser: "41482cde-f8df-11eb-9a03-0242ac130003",
+        phoneNumber: "333333",
+        phoneType: "work",
     }],
     note: "Здесь могла бы быть ваша реклама"
 }, {
     id: "4984564cde-f8df-11eb-9a03-0242ac130003",
     name: "Sokolov",
     phone: [{
-        idUser: 4,
-        mob: "444441",
-        dom: "",
-        id: "4984564cde-f8df-11eb-9a03-0242ac130003"
+        id: 10,
+        idUser: "4984564cde-f8df-11eb-9a03-0242ac130003",
+        phoneNumber: "444441",
+        phoneType: "mobile",
+    }, {
+        id: 11,
+        idUser: "4984564cde-f8df-11eb-9a03-0242ac130003",
+        phoneNumber: "444442",
+        phoneType: "home",
+    }, {
+        id: 12,
+        idUser: "4984564cde-f8df-11eb-9a03-0242ac130003",
+        phoneNumber: "444443",
+        phoneType: "work",
     }],
     note: ""
 }];
@@ -51,37 +91,41 @@ loadPage().then((value) => {
         ...a
     }));
     rendering();
-})
-
-rendering()
+});
 
 function rendering() {
     let numberString = 1; // set first number string
 
     database.forEach((obj) => { // iterate over the array, getting each element (object) separately
 
-        let mobPhone = "";
-        let domPhone = "";
-
-        let dataPhone = obj.phone
-        dataPhone.forEach((obj) => {
-            if (obj.mob !== "") mobPhone = "mob: " + obj.mob;
-            if (obj.dom !== "") domPhone = "dom: " + obj.dom;
-        });
-
-
         let tableStart = document.getElementById('tableStart'); // element for paste row
         tableStart.insertAdjacentHTML('beforeend', '\
         <div class="grid-item"> ' + numberString + ' </div> \
         <div class="grid-item"> ' + obj.name + '</div> \
-        <div class="grid-item">  <div>' + mobPhone + '</div> <div>' + domPhone + '</div>  </div> \
+        <div class="grid-item" idObject="' + obj.id + '"></div> \
         <div class="grid-item"> ' + obj.note + ' </div> \
         <div class="grid-item"> <button onclick="openEditForm(this)" idObject="' + obj.id + '">Edit</button> </div> \
         <div class="grid-item"> <button onclick="removeByAttrButton(this)" idObject="' + obj.id + '">Delete</button> </div> \
-         ')
+        ')
         numberString += 1;
     });
+    insertPhone()
 }
+
+function insertPhone() {
+    database.forEach((obj) => {
+        let dataPhone = obj.phone
+        dataPhone.forEach((obj) => {
+            if (obj.phoneNumber !== "") {
+                let phoneCell = document.querySelector(`div[idObject="${obj.idUser}"]`);
+                phoneCell.insertAdjacentHTML('beforeend', '\
+                    <div> ' + obj.phoneType + ': ' + obj.phoneNumber + ' </div>  \
+                    ');
+            };
+        });
+    });
+};
+
 
 // delete object
 
