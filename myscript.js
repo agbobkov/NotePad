@@ -158,100 +158,168 @@ function deleteTable() {
         elem.remove();
 };
 
-// // open, clouse and reset form
+// open, clouse and reset form
 
-// function openForm(popupId) {
-//     document.getElementById(popupId).style.display = "block";
-// }
+function openForm(popupId) {
+    document.getElementById(popupId).style.display = "block";
+}
 
-// function closeForm(popupId, nameForm) {
-//     document.getElementById(popupId).style.display = "none";
-//     resetForm(nameForm)
-// }
+function closeForm(popupId, nameForm) {
+    document.getElementById(popupId).style.display = "none";
+    resetForm(nameForm)
+}
 
-// function activationButton(nameForm) {
-//     let buttonSubmit = document.forms[nameForm].querySelector('button[type="submit"]');
-//     buttonSubmit.removeAttribute("disabled");
-//     buttonSubmit.setAttribute("class", "btn");
-// }
+function activationButton(nameForm) {
+    let buttonSubmit = document.forms[nameForm].querySelector('button[type="submit"]');
+    buttonSubmit.removeAttribute("disabled");
+    buttonSubmit.setAttribute("class", "btn");
+}
 
-// function resetForm(nameForm) {
-//     let form = document.forms[nameForm];
-//     form.reset();
-//     form.querySelector('textarea').value = '';
-//     form.querySelector('div').innerHTML = '';
-//     form.elements['phone'].style.border = "none";
+function resetForm(nameForm) {
+    let form = document.forms[nameForm];
+    form.reset();
+    form.querySelector('textarea').value = '';
 
-//     let buttonSubmit = form.querySelector('button[type="submit"]');
-//     buttonSubmit.setAttribute("disabled", "disabled");
-//     buttonSubmit.setAttribute("class", "disabled");
-// }
+    let buttonSubmit = form.querySelector('button[type="submit"]');
+    buttonSubmit.setAttribute("disabled", "disabled");
+    buttonSubmit.setAttribute("class", "disabled");
 
-// // Add object
+    let phoneField = document.getElementById('phoneField').querySelectorAll('*');
+    for (let elem of phoneField)
+        elem.remove();
 
-// function addNote() {
-//     let form = document.forms['formAdd']; // get form
-//     let name = form.elements['name'].value; // get name from form
-//     let phone = form.elements['phone'].value; // get phone from form
-//     let note = form.querySelector('textarea').value; // get comment from form
+    clearInputInForm(nameForm);
 
-//     let isPhoneNumberValid = validPhone('formAdd');
-//     if (isPhoneNumberValid) {
-//         closeForm('popupFormAdd', 'formAdd');
-//         let newNote = {
-//             name: name,
-//             tel: phone,
-//             note: note
-//         };
-//         addObject(newNote).then((value) => {
-//             if (value) {
-//                 deleteTable()
-//                 loadPage().then((value) => {
-//                     database = value.map(a => ({
-//                         ...a
-//                     }));
-//                     rendering();
-//                 });
-//             };
-//         });
-//     };
-// };
+}
 
-// let addObject = async (newNote) => {
-//     let objectForAdd = Object.assign({
-//         id: String(Math.random())
-//     }, newNote);
-//     db.push(objectForAdd) // add new object in db
-//     return true
-// };
+function clearInputInForm(nameForm) {
+    let form = document.forms[nameForm];
+    let everyPhoneInput = form.querySelectorAll('input[type="phone"');
+    for (key of everyPhoneInput) {
+        key.style.border = "none";
+    };
 
-// // valid Phone
+    let everyMessageFault = form.querySelectorAll('div[class="message-fault"]');
+    for (key of everyMessageFault) {
+        key.remove();
+    };
+};
 
-// function validPhone(nameForm) {
-//     let pattern = /^\d[\d\(\)\ -]{2,16}\d$/;
-//     let form = document.forms[nameForm];
-//     let inputPhoneValue = form.elements['phone'].value;
+// Add object
 
-//     let correctNumber = pattern.test(inputPhoneValue); // return true or false
-//     let newNumber = database.findIndex((obj) => {
-//         return obj.tel === inputPhoneValue
-//     }); // iterate every object in array searsh index of phone number, if it is
+function addNote() {
+    clearInputInForm('formAdd')
+    let form = document.forms['formAdd']; // get form
+    let name = form.elements['name'].value; // get name from form
+    let phone = form.elements['phone']; // get phone from form
+    // for (key of phone) {
+    //     ///
+    // }
+
+    let note = form.querySelector('textarea').value; // get comment from form
+
+    let isPhoneNumberValid = validPhone('formAdd'); // get true or false
+    if (isPhoneNumberValid) {
+        closeForm('popupFormAdd', 'formAdd');
+        //     let newNote = {
+        //         name: name,
+        //         tel: phone,
+        //         note: note
+        //    };
+        //     addObject(newNote).then((value) => {
+        //         if (value) {
+        //             deleteTable()
+        //             loadPage().then((value) => {
+        //                 database = value.map(a => ({
+        //                     ...a
+        //                 }));
+        //                 rendering();
+        //             });
+        //         };
+        //     });
+    };
+};
+
+let addObject = async (newNote) => {
+    let objectForAdd = Object.assign({
+        id: String(Math.random())
+    }, newNote);
+    db.push(objectForAdd) // add new object in db
+    return true
+};
+
+// valid Phone
+
+function validPhone(nameForm) {
+  //  let pattern = /^\d[\d\(\)\ -]{2,16}\d$/;
+    let form = document.forms[nameForm];
+    let phone = form.querySelectorAll('input[type="phone"');
+
+    let result = "true";
+console.log(result)
+
+    let phoneArray = [];
+
+    for (key of phone) {
+
+        let inputPhoneValue = key.value; // get every phone from form
+
+       if(isPhoneNumberCorrect(inputPhoneValue, key) === false) result = false;
+
+        // check is phoneNumber correct
+
+        // let isCorrectNumber = pattern.test(inputPhoneValue); // return true or false
+        // if (isCorrectNumber === false) { // check is number correct
+        //     key.style.border = "2px solid red";
+        //     key.insertAdjacentHTML('afterend', '<div class="message-fault">Номер телефона введен не корректно!</div>')
+        //     result = false;
+        // };
+
+        // check is phoneNumber exist
+
+        database.forEach((obj) => {
+            let phoneArray = obj.phone
+
+            let isNewNumber = phoneArray.findIndex((obj) => { // check is number exist
+                return obj.phoneNumber === inputPhoneValue
+            }); // iterate every object in array searsh index of phone number, if it is
+
+            if (isNewNumber > -1) {
+                key.style.border = "2px solid red";
+                key.insertAdjacentHTML('afterend', '<div class="message-fault">Такой номер телефона уже существует!</div>')
+                result = false;
+            };
+        });
 
 
-//     if (correctNumber === false) { // check is number correct
-//         form.elements['phone'].style.border = "2px solid red";
-//         form.querySelector('div').innerHTML = 'Номер телефона введен не корректно!';
-//         //   document.getElementById('message-fault').innerHTML = 'Номер телефона введен не корректно!';
-//         return false;
-//     };
+        let isNumberAlreadyInput = phoneArray.findIndex((obj) => { // check is number exist
+            return obj === inputPhoneValue
+        }); // iterate every object in array searsh index of phone number, if it is
 
-//     if (newNumber > -1) { // check is number exist
-//         form.elements['phone'].style.border = "2px solid red";
-//         form.querySelector('div').innerHTML = 'Такой номер телефона уже существует!';
-//         return false;
-//     };
-//     return true;
-// };
+        if (isNumberAlreadyInput > -1) {
+            key.style.border = "2px solid red";
+            key.insertAdjacentHTML('afterend', '<div class="message-fault">Этот номер телефона уже введен!</div>')
+            result = false;
+        };
+
+        phoneArray.push(inputPhoneValue);
+
+    };
+
+    return result;
+};
+
+// check is phoneNumber correct
+function isPhoneNumberCorrect(inputPhoneValue, key) {
+    debugger
+    let pattern = /^\d[\d\(\)\ -]{2,16}\d$/;
+    let isCorrectNumber = pattern.test(inputPhoneValue); // return true or false
+    if (isCorrectNumber === false) { // check is number correct
+        key.style.border = "2px solid red";
+        key.insertAdjacentHTML('afterend', '<div class="message-fault">Номер телефона введен не корректно!</div>')
+        return false;
+    };
+};
 
 
 // // popup Edit
@@ -344,3 +412,35 @@ function deleteTable() {
 //     db.splice(i, 1, editObject);
 //     return true
 // };
+
+
+// add phone field
+
+let numberAddField = 2; // set first number add phone
+
+function addPhoneContainer() {
+    let phoneContainerStart = document.getElementById('phoneField'); // element for paste 
+    phoneContainerStart.insertAdjacentHTML('beforeend', '\
+    <div class="flex-container" numberAddField="addField' + numberAddField + '">\
+    <div> <input type="phone" placeholder="Телефон (обязательно)" \
+    name="phone" required> </div> \
+    <div> \
+         <select name="typeNumber"> \
+            <option selected>Mobile</option> \
+            <option value="Home">Home</option> \
+            <option value="Work">Work</option> \
+         </select> \
+    </div> \
+    <div><button type="button" class="btn-del-phone" onclick="deletePhoneField(' + numberAddField + ')">X</button></div> \
+          </div> \
+    ')
+
+    numberAddField += 1;
+};
+
+
+function deletePhoneField(numberAddField) {
+    let phoneFieldForDelete = document.querySelector('div[numberAddField="addField' + numberAddField + '"]'); // get all row which rendered
+    phoneFieldForDelete.remove();
+
+};
