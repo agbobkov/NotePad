@@ -166,3 +166,13 @@ form textarea:focus {
 .flex-container {
   display: flex;
 }
+
+.heading-for-phoneNumberInput {
+  width: 165%;
+  font-weight: bold;
+}
+
+.heading-for-phoneTypeSelect {
+  width: 110%;
+  font-weight: bold;
+}

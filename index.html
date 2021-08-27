@@ -33,26 +33,32 @@
         <label for="name"><b>Name</b></label>
         <input type="text" placeholder="Имя (обязательно)" oninput="activationButton('formAdd')" name="name" required>
 
-
         <div class="flex-container">
+          <div class="heading-for-phoneNumberInput"> Phone</div>
+          <div class="heading-for-phoneTypeSelect">Type</div>
+        </div>
+
+        <!-- <div class="flex-container" numberAddField="addField1">
           <div>
-            <label for="phone"><b>Phone</b><br></label>
-            <input type="phone" placeholder="Телефон (обязательно)" oninput="activationButton('formAdd')" name="phone"
-              required>
+            <label for="phone"></label>
+            <input type="phone" placeholder="Телефон (обязательно)" name="phone" required>
           </div>
 
           <div>
-            <b>Type</b><br>
+
             <select name="typeNumber">
               <option value="mobile" selected>Mobile</option>
               <option value="home">Home</option>
               <option value="work">Work</option>
             </select>
           </div>
-        </div>
-        <div id="phoneField"></div>
+          <div><button type="button" class="btn-del-phone" onclick="deletePhoneField('1')">X</button>
+          </div>
+        </div> -->
 
-        <button type="button" class="btn-add-phone" onclick="addPhoneContainer()">Add
+        <div name="phoneField"></div>
+
+        <button type="button" class="btn-add-phone" onclick="addPhoneContainer('formAdd')">Add
           phone</button><br>
 
         <b>Note</b><br>
@@ -67,15 +73,21 @@
   <!-- popup Edit-->
   <div class="popup" id="popupFormEdit">
     <div class="form-popup">
-      <form onsubmit="editNote();return false;" class="form-container" name="formEdit">
+      <form onsubmit="saveEditNote();return false;" class="form-container" name="formEdit">
         <h1>Редактировать запись</h1>
 
         <label for="name"><b>Name</b></label>
         <input type="text" placeholder="Имя" oninput="activationButton('formEdit')" name="name" required>
 
-        <label for="phone"><b>Phone</b></label>
-        <input type="phone" placeholder="Телефон" oninput="activationButton('formEdit')" name="phone" required>
-        <div class="message-fault"></div>
+        <div class="flex-container">
+          <div class="heading-for-phoneNumberInput"> Phone</div>
+          <div class="heading-for-phoneTypeSelect">Type</div>
+        </div>
+
+        <div name="phoneField"></div>
+
+        <button type="button" class="btn-add-phone" onclick="addPhoneContainer('formEdit'); activationButton('formEdit')">Add
+          phone</button><br>
 
         <b>Note</b><br>
         <textarea placeholder="Комментарий" oninput="activationButton('formEdit')"></textarea>
